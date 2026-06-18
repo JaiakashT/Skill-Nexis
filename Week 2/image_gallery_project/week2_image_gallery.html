@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Image Gallery</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #2c3e50;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  h1 {
+    margin-bottom: 25px;
+  }
+
+  /* Gallery Grid */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 700px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .gallery img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Hover Animation */
+  .gallery img:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox img {
+    max-width: 85%;
+    max-height: 85%;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    animation: zoomIn 0.3s ease;
+  }
+
+  .lightbox .close-btn {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .lightbox .close-btn:hover {
+    color: #d4a017;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes zoomIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>Interactive Image Gallery</h1>
+
+  <!-- Image Grid -->
+  <div class="gallery" id="gallery">
+    <img src="gallery_assets/mountain_top.png" alt="Man celebrating on a mountain top above the clouds">
+    <img src="gallery_assets/butterfly.png" alt="Monarch butterfly on an orange flower">
+    <img src="gallery_assets/giant_brain.png" alt="Person standing before a giant brain sculpture">
+    <img src="gallery_assets/cliff_jump.png" alt="Silhouette jumping between two cliffs at sunset">
+    <img src="gallery_assets/forest_bridge.png" alt="Mossy wooden bridge through a green forest">
+    <img src="gallery_assets/beach_sunrise.png" alt="Person with arms raised on a beach at sunrise">
+    <img src="gallery_assets/tiger.png" alt="Tiger walking through grass">
+    <img src="gallery_assets/puppies.png" alt="Two golden retriever puppies sitting in flowers">
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <img src="" alt="Expanded view" id="lightboxImg">
+  </div>
+
+  <script>
+    // Select all gallery images
+    const galleryImages = document.querySelectorAll('#gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.getElementById('closeBtn');
+
+    // Open lightbox on image click
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+
+    // Close lightbox on close button click
+    closeBtn.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        lightbox.classList.remove('active');
+      }
+    });
+  </script>
+
+</body>
+</html>
